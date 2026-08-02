@@ -6,7 +6,7 @@ A production-ready, ultra-modern E-Commerce platform built with the **MERN Stack
 
 ## 🔗 Live Deployment URLs & Repository
 
-- **GitHub Repository**: `https://github.com/YOUR_GITHUB_USERNAME/e-commerce-ai-platform` *(Replace with your GitHub repository URL)*
+- **GitHub Repository**: `https://github.com/barathsuriyas2025ece-lang/E-Commerce-website-`
 - **Live Frontend (Vercel)**: `https://your-app-name.vercel.app` *(Replace with your Vercel URL)*
 - **Live Backend (Render)**: `https://your-api-name.onrender.com` *(Replace with your Render URL)*
 
