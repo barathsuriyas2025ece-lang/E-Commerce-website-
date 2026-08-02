@@ -9,6 +9,7 @@ import { AIProvider } from './context/AIContext';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CartDrawer from './components/CartDrawer';
 import FloatingAI from './widgets/FloatingAI';
 import CompareProducts from './comparison/CompareProducts';
 
@@ -72,6 +73,9 @@ function App() {
                         <Route path="/admin/coupons" element={<AdminCoupons />} />
                       </Routes>
                     </main>
+
+                    {/* Instant Slide-over Cart Drawer */}
+                    <CartDrawer />
 
                     {/* Persistent Floating AI Assistant on every page */}
                     <FloatingAI />
