@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Scale, Package, Tag, HelpCircle, ShoppingBag } from 'lucide-react';
+import { Search, Scale, Package, Tag, HelpCircle } from 'lucide-react';
 
 const chips = [
   { label: 'Laptops under ₹70,000', icon: Search, text: 'Show laptops under ₹70,000' },
@@ -18,9 +18,9 @@ const QuickActionChips = ({ onSelectChip }) => {
           <button
             key={idx}
             onClick={() => onSelectChip(chip.text)}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 hover:bg-indigo-600/30 hover:border-indigo-500/50 text-indigo-300 text-[11px] font-medium whitespace-nowrap transition"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 text-indigo-700 text-[11px] font-medium whitespace-nowrap transition"
           >
-            <Icon className="w-3 h-3 text-indigo-400" />
+            <Icon className="w-3 h-3 text-indigo-600" />
             <span>{chip.label}</span>
           </button>
         );

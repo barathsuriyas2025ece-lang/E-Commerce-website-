@@ -7,7 +7,7 @@ import { useAI } from '../context/AIContext';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
-  const { wishlist, toggleWishlist, isInWishlist } = useWishlist();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const { setActiveCompareItems } = useAI();
 
   const isLiked = isInWishlist(product._id);
@@ -18,9 +18,9 @@ const ProductCard = ({ product }) => {
       : null;
 
   return (
-    <div className="glass-panel group overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/10">
+    <div className="glass-panel group overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl bg-white border border-slate-200">
       {/* Product Image & Badges */}
-      <div className="relative aspect-square overflow-hidden bg-slate-900/50">
+      <div className="relative aspect-square overflow-hidden bg-slate-50">
         <img
           src={product.images?.[0] || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800'}
           alt={product.name}
@@ -30,7 +30,7 @@ const ProductCard = ({ product }) => {
         {/* Floating Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
           {product.isFeatured && <span className="badge badge-featured">Featured</span>}
-          {discount && <span className="badge bg-red-500 text-white font-bold">{discount}% OFF</span>}
+          {discount && <span className="badge bg-red-600 text-white font-bold">{discount}% OFF</span>}
         </div>
 
         {/* Floating Action Buttons */}
@@ -40,8 +40,8 @@ const ProductCard = ({ product }) => {
               e.preventDefault();
               toggleWishlist(product);
             }}
-            className={`w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition ${
-              isLiked ? 'bg-pink-500 text-white' : 'bg-slate-900/70 text-slate-300 hover:text-pink-400'
+            className={`w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md shadow-md transition ${
+              isLiked ? 'bg-pink-600 text-white' : 'bg-white/90 text-slate-700 hover:text-pink-600'
             }`}
             title="Add to Wishlist"
           >
@@ -53,7 +53,7 @@ const ProductCard = ({ product }) => {
               e.preventDefault();
               setActiveCompareItems([product]);
             }}
-            className="w-9 h-9 rounded-full bg-slate-900/70 text-slate-300 hover:text-indigo-400 backdrop-blur-md flex items-center justify-center transition"
+            className="w-9 h-9 rounded-full bg-white/90 text-slate-700 hover:text-indigo-600 backdrop-blur-md shadow-md flex items-center justify-center transition"
             title="Compare Product"
           >
             <Scale className="w-4 h-4" />
@@ -62,29 +62,29 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* Product Body */}
-      <div className="p-4 flex-1 flex flex-col justify-between gap-3">
+      <div className="p-4 flex-1 flex flex-col justify-between gap-3 bg-white">
         <div>
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-indigo-400">{product.category}</span>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600">{product.category}</span>
           <Link to={`/product/${product._id}`}>
-            <h3 className="text-base font-semibold text-slate-100 hover:text-indigo-300 transition line-clamp-1 mt-0.5">
+            <h3 className="text-sm font-bold text-slate-900 hover:text-indigo-600 transition line-clamp-1 mt-0.5">
               {product.name}
             </h3>
           </Link>
 
           {/* Rating */}
           <div className="flex items-center gap-1.5 mt-1.5">
-            <div className="flex items-center text-amber-400">
+            <div className="flex items-center text-amber-500">
               <Star className="w-3.5 h-3.5 fill-current" />
-              <span className="text-xs font-bold ml-1 text-slate-200">{product.rating || 4.5}</span>
+              <span className="text-xs font-bold ml-1 text-slate-800">{product.rating || 4.5}</span>
             </div>
             <span className="text-[11px] text-slate-400">({product.numReviews || 12} reviews)</span>
           </div>
         </div>
 
         {/* Price & Add to Cart Action */}
-        <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
           <div>
-            <div className="text-lg font-bold text-slate-100">
+            <div className="text-base font-extrabold text-slate-900">
               ₹{product.price.toLocaleString()}
             </div>
             {product.originalPrice > product.price && (
@@ -96,7 +96,7 @@ const ProductCard = ({ product }) => {
 
           <button
             onClick={() => addToCart(product)}
-            className="btn-primary py-2 px-3 text-xs"
+            className="btn-primary py-1.5 px-3 text-xs"
           >
             <ShoppingCart className="w-3.5 h-3.5" />
             <span>Add</span>
