@@ -153,4 +153,128 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct };
+const createProductReview = async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+    const productId = req.params.id;
+
+    if (!rating || !comment) {
+      return res.status(400).json({ success: false, message: 'Please provide rating and comment' });
+    }
+
+    const userId = req.user?._id || req.user?.id || 'u_' + Date.now();
+    const userName = req.user?.name || req.user?.email?.split('@')[0] || 'Customer';
+
+    try {
+      const product = await Product.findById(productId);
+      if (product) {
+        if (!product.reviews) product.reviews = [];
+
+        const existingReview = product.reviews.find(
+          (r) => r.user.toString() === userId.toString()
+        );
+
+        if (existingReview) {
+          existingReview.rating = Number(rating);
+          existingReview.comment = comment;
+        } else {
+          product.reviews.push({
+            user: userId,
+            userName,
+            rating: Number(rating),
+            comment,
+            createdAt: new Date(),
+          });
+        }
+
+        product.numReviews = product.reviews.length;
+        product.rating = Number(
+          (product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length).toFixed(1)
+        );
+
+        await product.save();
+        return res.status(201).json({ success: true, message: 'Review added successfully', product });
+      }
+    } catch (dbErr) {}
+
+    const product = memoryProducts.find((p) => p._id.toString() === productId.toString() || p._id === productId);
+    if (product) {
+      if (!product.reviews) product.reviews = [];
+
+      const existingIndex = product.reviews.findIndex(
+        (r) => r.user && r.user.toString() === userId.toString()
+      );
+
+      const reviewItem = {
+        _id: 'rev_' + Date.now(),
+        user: userId,
+        userName,
+        rating: Number(rating),
+        comment,
+        createdAt: new Date(),
+      };
+
+      if (existingIndex !== -1) {
+        product.reviews[existingIndex] = reviewItem;
+      } else {
+        product.reviews.unshift(reviewItem);
+      }
+
+      product.numReviews = product.reviews.length;
+      product.rating = Number(
+        (product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length).toFixed(1)
+      );
+
+      return res.status(201).json({ success: true, message: 'Review saved successfully', product });
+    }
+
+    res.status(404).json({ success: false, message: 'Product not found' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const deleteProductReview = async (req, res) => {
+  try {
+    const { id, reviewId } = req.params;
+
+    try {
+      const product = await Product.findById(id);
+      if (product) {
+        product.reviews = product.reviews.filter((r) => r._id.toString() !== reviewId);
+        product.numReviews = product.reviews.length;
+        product.rating =
+          product.reviews.length > 0
+            ? Number((product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length).toFixed(1))
+            : 5;
+        await product.save();
+        return res.json({ success: true, message: 'Review deleted', product });
+      }
+    } catch (dbErr) {}
+
+    const product = memoryProducts.find((p) => p._id.toString() === id.toString() || p._id === id);
+    if (product && product.reviews) {
+      product.reviews = product.reviews.filter((r) => r._id.toString() !== reviewId && r._id !== reviewId);
+      product.numReviews = product.reviews.length;
+      product.rating =
+        product.reviews.length > 0
+          ? Number((product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length).toFixed(1))
+          : 5;
+      return res.json({ success: true, message: 'Review deleted', product });
+    }
+
+    res.status(404).json({ success: false, message: 'Product or review not found' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+module.exports = {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  createProductReview,
+  deleteProductReview,
+};

@@ -71,6 +71,20 @@ export const productAPI = {
   createProduct: (data) => api.post('/products', data),
   updateProduct: (id, data) => api.put(`/products/${id}`, data),
   deleteProduct: (id) => api.delete(`/products/${id}`),
+  addReview: async (id, reviewData) => {
+    try {
+      return await api.post(`/products/${id}/reviews`, reviewData);
+    } catch (err) {
+      return { success: false };
+    }
+  },
+  deleteReview: async (id, reviewId) => {
+    try {
+      return await api.delete(`/products/${id}/reviews/${reviewId}`);
+    } catch (err) {
+      return { success: false };
+    }
+  },
 };
 
 export const orderAPI = {

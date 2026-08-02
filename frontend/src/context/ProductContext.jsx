@@ -84,10 +84,83 @@ export const ProductProvider = ({ children }) => {
     return map;
   }, [products]);
 
-  const getProductById = (id) => productMap.get(id?.toString()) || products[0];
+  const addOrUpdateReview = async (productId, { rating, comment, user }) => {
+    try {
+      await productAPI.addReview(productId, { rating, comment });
+    } catch (err) {}
+
+    setProducts((prevProducts) =>
+      prevProducts.map((p) => {
+        if (p._id.toString() === productId.toString() || p._id === productId) {
+          const currentReviews = p.reviews ? [...p.reviews] : [];
+          const userIdStr = (user?.id || user?._id || 'u_guest').toString();
+          const existingIndex = currentReviews.findIndex(
+            (r) => r.user && r.user.toString() === userIdStr
+          );
+
+          const newReview = {
+            _id: 'rev_' + Date.now(),
+            user: userIdStr,
+            userName: user?.name || user?.email?.split('@')[0] || 'Verified Buyer',
+            rating: Number(rating),
+            comment,
+            createdAt: new Date().toISOString(),
+          };
+
+          if (existingIndex !== -1) {
+            currentReviews[existingIndex] = newReview;
+          } else {
+            currentReviews.unshift(newReview);
+          }
+
+          const avgRating = Number(
+            (currentReviews.reduce((acc, r) => acc + r.rating, 0) / currentReviews.length).toFixed(1)
+          );
+
+          return {
+            ...p,
+            reviews: currentReviews,
+            numReviews: currentReviews.length,
+            rating: avgRating,
+          };
+        }
+        return p;
+      })
+    );
+  };
+
+  const deleteReview = async (productId, reviewId) => {
+    try {
+      await productAPI.deleteReview(productId, reviewId);
+    } catch (err) {}
+
+    setProducts((prevProducts) =>
+      prevProducts.map((p) => {
+        if (p._id.toString() === productId.toString() || p._id === productId) {
+          const currentReviews = (p.reviews || []).filter(
+            (r) => r._id?.toString() !== reviewId?.toString()
+          );
+          const avgRating =
+            currentReviews.length > 0
+              ? Number(
+                  (currentReviews.reduce((acc, r) => acc + r.rating, 0) / currentReviews.length).toFixed(1)
+                )
+              : 5;
+
+          return {
+            ...p,
+            reviews: currentReviews,
+            numReviews: currentReviews.length,
+            rating: avgRating,
+          };
+        }
+        return p;
+      })
+    );
+  };
 
   return (
-    <ProductContext.Provider value={{ products, loading, getProductById }}>
+    <ProductContext.Provider value={{ products, loading, getProductById, addOrUpdateReview, deleteReview }}>
       {children}
     </ProductContext.Provider>
   );

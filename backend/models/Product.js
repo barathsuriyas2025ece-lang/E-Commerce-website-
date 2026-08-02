@@ -1,5 +1,15 @@
 const mongoose = require('mongoose');
 
+const reviewSchema = new mongoose.Schema(
+  {
+    user: { type: String, required: true },
+    userName: { type: String, required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    comment: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -11,8 +21,9 @@ const productSchema = new mongoose.Schema(
     stock: { type: Number, required: true, default: 10 },
     images: [{ type: String }],
     isFeatured: { type: Boolean, default: false },
-    rating: { type: Number, default: 4.5 },
-    numReviews: { type: Number, default: 12 },
+    rating: { type: Number, default: 5 },
+    numReviews: { type: Number, default: 0 },
+    reviews: [reviewSchema],
     specifications: { type: Map, of: String },
     advantages: [{ type: String }],
     disadvantages: [{ type: String }],
