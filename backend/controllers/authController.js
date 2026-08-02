@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const { sendLoginNotificationEmail } = require('../notifications/emailService');
 
 const ADMIN_EMAIL = 'barathsuriya.s2025ece@sece.ac.in';
 
@@ -42,6 +43,9 @@ const registerUser = async (req, res) => {
 
     const cleanEmail = email.toLowerCase().trim();
 
+    // Trigger Login Confirmation Email Notification
+    sendLoginNotificationEmail({ name, email: cleanEmail });
+
     try {
       const existingUser = await User.findOne({ email: cleanEmail });
       if (existingUser) {
@@ -61,6 +65,8 @@ const registerUser = async (req, res) => {
       const token = generateToken(user);
       return res.status(201).json({
         success: true,
+        emailNotificationSent: true,
+        message: `Welcome ${name}! A sign-in confirmation email has been sent to ${cleanEmail}.`,
         token,
         user: { id: user._id, name: user.name, email: user.email, role: user.role, loyaltyPoints: user.loyaltyPoints },
       });
@@ -81,6 +87,8 @@ const registerUser = async (req, res) => {
       const token = generateToken(newUser);
       return res.status(201).json({
         success: true,
+        emailNotificationSent: true,
+        message: `Welcome ${name}! A sign-in confirmation email has been sent to ${cleanEmail}.`,
         token,
         user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role, loyaltyPoints: newUser.loyaltyPoints },
       });
@@ -99,12 +107,17 @@ const loginUser = async (req, res) => {
 
     const cleanEmail = email.toLowerCase().trim();
 
+    // Trigger Login Confirmation Email Notification
+    sendLoginNotificationEmail({ name: cleanEmail.split('@')[0], email: cleanEmail });
+
     // Direct check for Admin user credentials
     if (cleanEmail === ADMIN_EMAIL && password === 'barath12345') {
       const adminUser = inMemoryUsers[0];
       const token = generateToken(adminUser);
       return res.json({
         success: true,
+        emailNotificationSent: true,
+        message: `Sign in successful! Security notification sent to ${cleanEmail}.`,
         token,
         user: { id: adminUser._id, name: adminUser.name, email: adminUser.email, role: 'admin', loyaltyPoints: 1000 },
       });
@@ -117,6 +130,8 @@ const loginUser = async (req, res) => {
         const token = generateToken(user);
         return res.json({
           success: true,
+          emailNotificationSent: true,
+          message: `Sign in successful! Security notification sent to ${cleanEmail}.`,
           token,
           user: { id: user._id, name: user.name, email: user.email, role: user.role, loyaltyPoints: user.loyaltyPoints },
         });
@@ -129,6 +144,8 @@ const loginUser = async (req, res) => {
       const token = generateToken(memUser);
       return res.json({
         success: true,
+        emailNotificationSent: true,
+        message: `Sign in successful! Security notification sent to ${cleanEmail}.`,
         token,
         user: { id: memUser._id, name: memUser.name, email: memUser.email, role: memUser.role, loyaltyPoints: memUser.loyaltyPoints },
       });
@@ -148,6 +165,8 @@ const loginUser = async (req, res) => {
     const token = generateToken(newUser);
     return res.json({
       success: true,
+      emailNotificationSent: true,
+      message: `Sign in successful! Security notification sent to ${cleanEmail}.`,
       token,
       user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role, loyaltyPoints: newUser.loyaltyPoints },
     });
