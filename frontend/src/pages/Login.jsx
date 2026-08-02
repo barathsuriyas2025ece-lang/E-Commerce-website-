@@ -16,7 +16,7 @@ const Login = () => {
     setError('');
     const res = await login(email, password);
     if (res.success) {
-      if (email.toLowerCase().includes('admin') || email.toLowerCase() === 'barathsuriya.s2025ece@sece.ac.in') {
+      if (res.user?.role === 'admin' || email.toLowerCase().includes('admin')) {
         navigate('/admin/dashboard');
       } else {
         navigate('/');
