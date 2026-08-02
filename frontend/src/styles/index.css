@@ -14,7 +14,7 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 font-bold rounded-xl shadow-xs transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 font-bold rounded-xl shadow-sm transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .badge {
@@ -26,7 +26,7 @@
   }
 
   .badge-featured {
-    @apply bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-xs;
+    @apply bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm;
   }
 
   .glass-panel {

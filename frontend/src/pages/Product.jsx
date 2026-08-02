@@ -332,7 +332,7 @@ const Product = () => {
                     <button
                       type="button"
                       onClick={() => handleDeleteReview(existingReview._id)}
-                      className="btn-secondary bg-white hover:bg-red-50 text-red-600 border border-red-200 font-bold py-2.5 px-4 text-xs rounded-xl inline-flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                      className="btn-secondary bg-white hover:bg-red-50 text-red-600 border border-red-200 font-bold py-2.5 px-4 text-xs rounded-xl inline-flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5 text-red-600 shrink-0" />
                       <span>Delete My Review</span>
@@ -370,13 +370,13 @@ const Product = () => {
                 return (
                   <div
                     key={rev._id || Math.random()}
-                    className={`glass-panel p-5 rounded-2xl bg-white border space-y-3 transition shadow-xs ${
+                    className={`glass-panel p-5 rounded-2xl bg-white border space-y-3 transition shadow-sm ${
                       isOwnReview ? 'border-indigo-300 bg-indigo-50/30' : 'border-slate-200'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                        <div className="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
                           {rev.userName ? rev.userName[0].toUpperCase() : 'U'}
                         </div>
                         <div>
