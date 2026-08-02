@@ -12,16 +12,27 @@ const app = express();
 // Connect Database with Fallback Graceful Mode
 connectDB();
 
-// Security Middlewares
-app.use(helmet({ contentSecurityPolicy: false }));
+// Security Header Middlewares (Protection against XSS, Clickjacking, MIME sniffing)
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+    xPoweredBy: false, // Prevents technology stack fingerprinting
+  })
+);
+
+// CORS Protection
 app.use(
   cors({
     origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
 );
 
-// Rate Limiting
+// Rate Limiting (Prevents Brute-Force & Denial of Service attacks)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 200,
@@ -29,10 +40,11 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Strict Body Parsers (Prevents buffer overflow & payload flooding)
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
-// API Routes
+// RESTful API Endpoint Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
@@ -46,14 +58,6 @@ app.get('/', (req, res) => {
     status: 'online',
     service: 'Enterprise MERN E-Commerce API with AI Assistant',
     dbStatus: getStatus(),
-    endpoints: {
-      auth: '/api/auth',
-      products: '/api/products',
-      orders: '/api/orders',
-      admin: '/api/admin',
-      ai: '/api/ai',
-      coupons: '/api/coupons',
-    },
     timestamp: new Date().toISOString(),
   });
 });
