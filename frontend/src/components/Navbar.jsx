@@ -10,7 +10,7 @@ import NotificationBell from '../notifications/NotificationBell';
 
 const Navbar = () => {
   const { user, isAdmin, logout } = useAuth();
-  const { itemCount, setIsCartOpen } = useCart();
+  const { itemCount, setIsCartOpen, clearCart } = useCart();
   const { count: wishlistCount } = useWishlist();
   const { isDark, toggleTheme } = useTheme();
   const { setIsAiOpen } = useAI();
@@ -22,6 +22,12 @@ const Navbar = () => {
     if (searchTerm.trim()) {
       navigate(`/shop?search=${encodeURIComponent(searchTerm)}`);
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    clearCart();
+    navigate('/');
   };
 
   return (
@@ -108,12 +114,14 @@ const Navbar = () => {
           {user ? (
             <div className="flex items-center gap-2">
               <Link to="/profile" className="flex items-center gap-2 p-1 rounded-full hover:bg-slate-100 transition">
-                <img src={user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'} alt="Avatar" className="w-7 h-7 rounded-full border border-indigo-500" />
+                <div className="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">
+                  {user.name ? user.name[0].toUpperCase() : 'U'}
+                </div>
                 <span className="text-xs font-medium text-slate-700 hidden lg:inline">{user.name}</span>
               </Link>
               <button
-                onClick={logout}
-                className="text-xs text-slate-500 hover:text-slate-800 transition underline"
+                onClick={handleLogout}
+                className="text-xs text-slate-500 hover:text-slate-800 transition underline font-semibold"
               >
                 Logout
               </button>

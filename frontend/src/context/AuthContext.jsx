@@ -56,8 +56,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setToken(null);
     setNotification('');
+    // Clear user session, cart, and wishlist data completely upon logout
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('cartItems');
+    localStorage.removeItem('wishlist');
   };
 
   return (
