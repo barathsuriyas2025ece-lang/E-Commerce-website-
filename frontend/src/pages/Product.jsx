@@ -26,7 +26,7 @@ const Product = () => {
     );
   }
 
-  const isLiked = isInWishlist(product._id);
+  const isLiked = isInWishlist(product._id || product.id);
 
   return (
     <div className="space-y-12 pb-16">

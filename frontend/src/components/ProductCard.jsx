@@ -10,7 +10,7 @@ const ProductCard = ({ product }) => {
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { setActiveCompareItems } = useAI();
 
-  const isLiked = isInWishlist(product._id);
+  const isLiked = isInWishlist(product._id || product.id);
 
   const discount =
     product.originalPrice && product.originalPrice > product.price

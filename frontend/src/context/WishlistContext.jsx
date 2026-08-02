@@ -13,16 +13,23 @@ export const WishlistProvider = ({ children }) => {
   }, [wishlist]);
 
   const toggleWishlist = (product) => {
+    if (!product) return;
+    const targetId = product._id || product.id;
+    if (!targetId) return;
+
     setWishlist((prev) => {
-      const exists = prev.some((p) => p._id === product._id);
+      const exists = prev.some((p) => (p._id || p.id) === targetId);
       if (exists) {
-        return prev.filter((p) => p._id !== product._id);
+        return prev.filter((p) => (p._id || p.id) !== targetId);
       }
       return [...prev, product];
     });
   };
 
-  const isInWishlist = (productId) => wishlist.some((p) => p._id === productId);
+  const isInWishlist = (productId) => {
+    if (!productId) return false;
+    return wishlist.some((p) => (p._id || p.id) === productId);
+  };
 
   return (
     <WishlistContext.Provider value={{ wishlist, toggleWishlist, isInWishlist, count: wishlist.length }}>

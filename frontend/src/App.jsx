@@ -49,7 +49,7 @@ function App() {
             <CartProvider>
               <WishlistProvider>
                 <AIProvider>
-                  <div className="min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+                  <div className="min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
                     <Navbar />
                     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 flex-1 w-full">
                       <Routes>

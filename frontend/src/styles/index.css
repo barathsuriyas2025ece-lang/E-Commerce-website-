@@ -4,37 +4,72 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased min-h-screen;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading tracking-tight text-slate-900;
+    @apply bg-slate-50 text-slate-900 font-sans antialiased min-h-screen transition-colors duration-300;
   }
 }
 
-/* Custom Component Classes */
-.glass-panel {
-  @apply bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200;
+/* Comprehensive Dark Mode Overrides for Global Theme Switching */
+html.dark, html.dark body {
+  background-color: #030712 !important; /* slate-950 */
+  color: #f9fafb !important; /* slate-50 */
 }
 
-.btn-primary {
-  @apply bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-2.5 px-5 rounded-full inline-flex items-center gap-2 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 transition-all cursor-pointer border-none;
+html.dark .bg-white {
+  background-color: #0f172a !important; /* slate-900 */
 }
 
-.btn-secondary {
-  @apply bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 font-semibold py-2.5 px-5 rounded-full inline-flex items-center gap-2 transition-all cursor-pointer hover:-translate-y-0.5;
+html.dark .bg-slate-50 {
+  background-color: #030712 !important; /* slate-950 */
 }
 
-.badge {
-  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase;
+html.dark .bg-slate-100 {
+  background-color: #1e293b !important; /* slate-800 */
 }
 
-.badge-featured {
-  @apply bg-amber-100 text-amber-800 border border-amber-300;
+html.dark .bg-slate-200 {
+  background-color: #334155 !important; /* slate-700 */
 }
 
-.badge-stock {
-  @apply bg-emerald-100 text-emerald-800 border border-emerald-300;
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700 {
+  color: #f8fafc !important; /* slate-50 */
+}
+
+html.dark .text-slate-600,
+html.dark .text-slate-500 {
+  color: #cbd5e1 !important; /* slate-300 */
+}
+
+html.dark .border-slate-200,
+html.dark .border-slate-100 {
+  border-color: #1e293b !important; /* slate-800 */
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+html.dark .glass-panel {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  border-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+html.dark .btn-secondary {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+html.dark header {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  border-color: #1e293b !important;
+  color: #f8fafc !important;
 }
 
 /* Pulse animation for floating AI button */
