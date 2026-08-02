@@ -1,0 +1,48 @@
+import React from 'react';
+import { User, Award, Mail, Phone, MapPin, Shield } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+
+const Profile = () => {
+  const { user } = useAuth();
+
+  const currentUser = user || {
+    name: 'Alex Johnson',
+    email: 'alex.johnson@example.com',
+    phone: '+91 9876543210',
+    role: 'customer',
+    loyaltyPoints: 350,
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto space-y-8 pb-12">
+      <div className="glass-panel p-8 rounded-3xl text-center relative overflow-hidden space-y-4">
+        <div className="w-24 h-24 rounded-full border-4 border-indigo-500 mx-auto overflow-hidden shadow-2xl">
+          <img src={currentUser.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'} alt="Profile" className="w-full h-full object-cover" />
+        </div>
+
+        <div>
+          <h1 className="text-2xl font-bold text-white">{currentUser.name}</h1>
+          <span className="badge bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase mt-1">
+            {currentUser.role} Account
+          </span>
+        </div>
+
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold">
+          <Award className="w-4 h-4 text-amber-400" />
+          <span>Loyalty Rewards: {currentUser.loyaltyPoints || 350} Points</span>
+        </div>
+      </div>
+
+      <div className="glass-panel p-6 rounded-2xl space-y-4 text-xs">
+        <h2 className="text-sm font-bold text-white border-b border-slate-800 pb-3">Personal Details</h2>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-slate-300"><Mail className="w-4 h-4 text-indigo-400" /><span>{currentUser.email}</span></div>
+          <div className="flex items-center gap-3 text-slate-300"><Phone className="w-4 h-4 text-indigo-400" /><span>{currentUser.phone || '+91 9876543210'}</span></div>
+          <div className="flex items-center gap-3 text-slate-300"><MapPin className="w-4 h-4 text-indigo-400" /><span>101 Innovation Way, Bengaluru, India</span></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
