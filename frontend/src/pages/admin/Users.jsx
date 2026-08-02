@@ -1,10 +1,17 @@
 import React from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminUsers = () => {
+  const { user } = useAuth();
+
   const users = [
-    { _id: 'u1', name: 'Barath Suriya (Admin)', email: 'barathsuriya.s2025ece@sece.ac.in', role: 'admin', points: 1000 },
-    { _id: 'u2', name: 'Customer User', email: 'customer@example.com', role: 'customer', points: 120 },
-    { _id: 'u3', name: 'Sarah Miller', email: 'sarah.m@example.com', role: 'customer', points: 240 },
+    {
+      _id: user?.id || 'u1',
+      name: user?.name || 'Administrator',
+      email: user?.email || 'admin@store.com',
+      role: user?.role || 'admin',
+      points: user?.loyaltyPoints || 1000,
+    },
   ];
 
   return (

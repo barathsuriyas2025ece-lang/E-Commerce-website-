@@ -6,11 +6,11 @@ const Profile = () => {
   const { user } = useAuth();
 
   const currentUser = user || {
-    name: 'Alex Johnson',
-    email: 'alex.johnson@example.com',
-    phone: '+91 9876543210',
+    name: 'Registered User',
+    email: 'user@store.com',
+    phone: 'Not provided',
     role: 'customer',
-    loyaltyPoints: 350,
+    loyaltyPoints: 0,
   };
 
   return (

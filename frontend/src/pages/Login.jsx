@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, Sparkles, Shield, UserCheck } from 'lucide-react';
+import { LogIn, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
@@ -24,11 +24,6 @@ const Login = () => {
     } else {
       setError(res.message);
     }
-  };
-
-  const handleDemoFill = (demoEmail, demoPass) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
   };
 
   return (
@@ -74,28 +69,6 @@ const Login = () => {
             <span>{loading ? 'Signing In...' : 'Sign In'}</span>
           </button>
         </form>
-
-        {/* Fill Helper Buttons */}
-        <div className="pt-4 border-t border-slate-100 space-y-2 text-xs">
-          <p className="text-slate-500 font-bold text-center">Fill Credentials Helper:</p>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => handleDemoFill('customer@example.com', 'password123')}
-              className="btn-secondary py-2 justify-center text-xs text-indigo-700 bg-indigo-50 border-indigo-200 hover:bg-indigo-100"
-            >
-              <UserCheck className="w-3.5 h-3.5" />
-              <span>Customer Credentials</span>
-            </button>
-
-            <button
-              onClick={() => handleDemoFill('barathsuriya.s2025ece@sece.ac.in', 'barath12345')}
-              className="btn-secondary py-2 justify-center text-xs text-amber-800 bg-amber-50 border-amber-200 hover:bg-amber-100"
-            >
-              <Shield className="w-3.5 h-3.5" />
-              <span>Admin Credentials</span>
-            </button>
-          </div>
-        </div>
 
         <div className="text-center text-xs text-slate-500 pt-2">
           Don't have an account? <Link to="/register" className="text-indigo-600 font-bold hover:underline">Register here</Link>
