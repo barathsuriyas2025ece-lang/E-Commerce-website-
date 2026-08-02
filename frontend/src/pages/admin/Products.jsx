@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Package, Search } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { productAPI } from '../../services/api';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -24,8 +23,6 @@ const AdminProducts = () => {
       }
     } catch (err) {
       console.error('Error fetching admin products:', err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -73,11 +70,11 @@ const AdminProducts = () => {
   };
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-8 pb-16">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white">Product Management</h1>
-          <p className="text-xs text-slate-400">Add, edit, or remove store products from catalog</p>
+          <h1 className="text-3xl font-extrabold text-slate-900">Product Management</h1>
+          <p className="text-xs text-slate-500">Add, edit, or remove store products from catalog</p>
         </div>
 
         <button onClick={() => setIsAddModalOpen(true)} className="btn-primary text-xs py-2.5 px-4">
@@ -87,9 +84,9 @@ const AdminProducts = () => {
       </div>
 
       {/* Products Table */}
-      <div className="glass-panel rounded-2xl overflow-x-auto text-xs text-slate-200">
+      <div className="glass-panel rounded-2xl overflow-x-auto text-xs text-slate-800 bg-white border border-slate-200 shadow-sm">
         <table className="w-full text-left">
-          <thead className="bg-slate-900/80 uppercase text-[10px] text-slate-400 font-bold border-b border-slate-800">
+          <thead className="bg-slate-50 uppercase text-[10px] text-slate-600 font-extrabold border-b border-slate-200">
             <tr>
               <th className="p-4">Product</th>
               <th className="p-4">Category</th>
@@ -98,22 +95,22 @@ const AdminProducts = () => {
               <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/80">
+          <tbody className="divide-y divide-slate-100">
             {products.map((p) => (
-              <tr key={p._id} className="hover:bg-slate-900/40 transition">
+              <tr key={p._id} className="hover:bg-slate-50 transition">
                 <td className="p-4 flex items-center gap-3">
-                  <img src={p.images?.[0]} alt={p.name} className="w-10 h-10 rounded-lg object-cover bg-slate-950" />
-                  <span className="font-bold text-white line-clamp-1">{p.name}</span>
+                  <img src={p.images?.[0]} alt={p.name} className="w-10 h-10 rounded-lg object-cover bg-slate-100 border border-slate-200" />
+                  <span className="font-bold text-slate-900 line-clamp-1">{p.name}</span>
                 </td>
-                <td className="p-4 text-indigo-300 font-semibold">{p.category}</td>
-                <td className="p-4 font-bold text-slate-100">₹{p.price?.toLocaleString()}</td>
+                <td className="p-4 text-indigo-700 font-bold">{p.category}</td>
+                <td className="p-4 font-extrabold text-slate-900">₹{p.price?.toLocaleString()}</td>
                 <td className="p-4">
-                  <span className={`badge ${p.stock < 5 ? 'bg-red-500/20 text-red-300' : 'badge-stock'}`}>
+                  <span className={`badge ${p.stock < 5 ? 'bg-red-50 text-red-700 border border-red-200' : 'badge-stock'}`}>
                     {p.stock} units
                   </span>
                 </td>
                 <td className="p-4 text-right">
-                  <button onClick={() => handleDeleteProduct(p._id)} className="p-1.5 text-slate-400 hover:text-red-400 transition">
+                  <button onClick={() => handleDeleteProduct(p._id)} className="p-1.5 text-slate-400 hover:text-red-600 transition">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </td>
@@ -125,27 +122,27 @@ const AdminProducts = () => {
 
       {/* Add Product Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="glass-panel w-full max-w-lg p-6 rounded-2xl space-y-4 text-xs text-slate-200">
-            <h2 className="text-lg font-bold text-white">Create New Catalog Product</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="glass-panel w-full max-w-lg p-6 rounded-2xl space-y-4 text-xs text-slate-800 bg-white border border-slate-200 shadow-2xl">
+            <h2 className="text-lg font-bold text-slate-900">Create New Catalog Product</h2>
             <form onSubmit={handleCreateProduct} className="space-y-3">
               <div>
-                <label className="text-slate-300 font-medium">Product Name</label>
-                <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500" />
+                <label className="text-slate-700 font-bold">Product Name</label>
+                <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-slate-300 font-medium">Price (₹)</label>
-                  <input type="number" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} required className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500" />
+                  <label className="text-slate-700 font-bold">Price (₹)</label>
+                  <input type="number" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} required className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium" />
                 </div>
                 <div>
-                  <label className="text-slate-300 font-medium">Stock Count</label>
-                  <input type="number" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} required className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500" />
+                  <label className="text-slate-700 font-bold">Stock Count</label>
+                  <input type="number" value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} required className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium" />
                 </div>
               </div>
               <div>
-                <label className="text-slate-300 font-medium">Category</label>
-                <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500">
+                <label className="text-slate-700 font-bold">Category</label>
+                <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium">
                   <option>Electronics & Laptops</option>
                   <option>Audio & Wearables</option>
                   <option>Apparel & Footwear</option>
@@ -153,12 +150,12 @@ const AdminProducts = () => {
                 </select>
               </div>
               <div>
-                <label className="text-slate-300 font-medium">Image URL</label>
-                <input type="text" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} required className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500" />
+                <label className="text-slate-700 font-bold">Image URL</label>
+                <input type="text" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} required className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium" />
               </div>
               <div>
-                <label className="text-slate-300 font-medium">Description</label>
-                <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} required rows={3} className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500"></textarea>
+                <label className="text-slate-700 font-bold">Description</label>
+                <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} required rows={3} className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"></textarea>
               </div>
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setIsAddModalOpen(false)} className="btn-secondary flex-1 justify-center">Cancel</button>

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Filter, Search, SlidersHorizontal } from 'lucide-react';
-import { productAPI } from '../services/api';
+import { useProducts } from '../context/ProductContext';
 import ProductCard from '../components/ProductCard';
-import SkeletonLoader from '../components/SkeletonLoader';
 
 const categoriesList = [
   { id: 'all', name: 'All Categories' },
@@ -14,66 +13,51 @@ const categoriesList = [
 ];
 
 const Shop = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const { products } = useProducts();
 
-  // Filters
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [maxPrice, setMaxPrice] = useState(150000);
   const [sortBy, setSortBy] = useState('newest');
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const params = {};
-        if (selectedCategory !== 'all') params.category = selectedCategory;
-        if (searchQuery) params.keyword = searchQuery;
-        if (maxPrice < 150000) params.maxPrice = maxPrice;
-        if (sortBy) params.sort = sortBy;
+  let filteredProducts = products.filter((p) => {
+    let matchesCategory = selectedCategory === 'all' || p.category.toLowerCase().includes(selectedCategory.toLowerCase());
+    let matchesSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.category.toLowerCase().includes(searchQuery.toLowerCase());
+    let matchesPrice = p.price <= maxPrice;
+    return matchesCategory && matchesSearch && matchesPrice;
+  });
 
-        const res = await productAPI.getProducts(params);
-        if (res.data.success) {
-          setProducts(res.data.products);
-        }
-      } catch (err) {
-        console.error('Error fetching catalog:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [selectedCategory, searchQuery, maxPrice, sortBy]);
+  if (sortBy === 'price-low') filteredProducts.sort((a, b) => a.price - b.price);
+  else if (sortBy === 'price-high') filteredProducts.sort((a, b) => b.price - a.price);
+  else if (sortBy === 'rating') filteredProducts.sort((a, b) => (b.rating || 4.5) - (a.rating || 4.5));
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-8 pb-16">
       {/* Header Banner */}
-      <div className="glass-panel p-8 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 border-slate-800">
-        <h1 className="text-3xl font-extrabold text-white">Product Catalog</h1>
-        <p className="text-sm text-slate-400 mt-1">Browse our complete collection of gadgets, footwear, and accessories.</p>
+      <div className="glass-panel p-8 rounded-2xl bg-white border border-slate-200 shadow-sm">
+        <h1 className="text-3xl font-extrabold text-slate-900">Product Catalog</h1>
+        <p className="text-sm text-slate-500 mt-1">Browse our complete collection of gadgets, footwear, and accessories.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Sidebar Filters */}
-        <aside className="glass-panel p-6 rounded-2xl h-fit space-y-6">
-          <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-            <Filter className="w-4 h-4 text-indigo-400" />
-            <h2 className="font-bold text-white text-sm">Filters & Search</h2>
+        <aside className="glass-panel p-6 rounded-2xl h-fit space-y-6 bg-white border border-slate-200 shadow-sm">
+          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+            <Filter className="w-4 h-4 text-indigo-600" />
+            <h2 className="font-bold text-slate-900 text-sm">Filters & Search</h2>
           </div>
 
           {/* Search Input */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300">Keyword Search</label>
+            <label className="text-xs font-bold text-slate-700">Keyword Search</label>
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 pl-9 pr-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-9 pr-3 text-xs text-slate-900 focus:outline-none focus:border-indigo-500"
               />
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
             </div>
@@ -81,14 +65,14 @@ const Shop = () => {
 
           {/* Categories Filter */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300">Category</label>
+            <label className="text-xs font-bold text-slate-700">Category</label>
             <div className="space-y-1">
               {categoriesList.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition ${
-                    selectedCategory === cat.id ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                    selectedCategory === cat.id ? 'bg-indigo-600 text-white font-bold' : 'text-slate-600 hover:bg-slate-100'
                   }`}
                 >
                   {cat.name}
@@ -100,8 +84,8 @@ const Shop = () => {
           {/* Price Range Slider */}
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
-              <span className="font-semibold text-slate-300">Max Price:</span>
-              <span className="font-bold text-indigo-400">₹{maxPrice.toLocaleString()}</span>
+              <span className="font-bold text-slate-700">Max Price:</span>
+              <span className="font-extrabold text-indigo-600">₹{maxPrice.toLocaleString()}</span>
             </div>
             <input
               type="range"
@@ -110,7 +94,7 @@ const Shop = () => {
               step="5000"
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
-              className="w-full accent-indigo-500 bg-slate-800 rounded-lg cursor-pointer"
+              className="w-full accent-indigo-600 bg-slate-200 rounded-lg cursor-pointer"
             />
           </div>
         </aside>
@@ -118,18 +102,18 @@ const Shop = () => {
         {/* Catalog Section */}
         <main className="lg:col-span-3 space-y-6">
           {/* Controls Bar */}
-          <div className="glass-panel p-4 rounded-xl flex items-center justify-between text-xs text-slate-300">
+          <div className="glass-panel p-4 rounded-xl flex items-center justify-between text-xs text-slate-700 bg-white border border-slate-200 shadow-sm">
             <div>
-              Showing <span className="font-bold text-white">{products.length}</span> products
+              Showing <span className="font-bold text-slate-900">{filteredProducts.length}</span> products
             </div>
 
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
-              <span>Sort By:</span>
+              <span className="font-semibold">Sort By:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-slate-900 border border-slate-800 text-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-indigo-500"
+                className="bg-slate-50 border border-slate-200 text-slate-900 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-indigo-500 font-medium"
               >
                 <option value="newest">Newest Arrivals</option>
                 <option value="price-low">Price: Low to High</option>
@@ -140,11 +124,9 @@ const Shop = () => {
           </div>
 
           {/* Product Grid */}
-          {loading ? (
-            <SkeletonLoader count={6} />
-          ) : products.length === 0 ? (
-            <div className="glass-panel p-12 text-center text-slate-400 space-y-3">
-              <p className="text-base font-semibold">No products found matching your filter criteria.</p>
+          {filteredProducts.length === 0 ? (
+            <div className="glass-panel p-12 text-center text-slate-500 space-y-3 bg-white border border-slate-200">
+              <p className="text-base font-semibold text-slate-800">No products found matching your filter criteria.</p>
               <button
                 onClick={() => {
                   setSelectedCategory('all');
@@ -158,7 +140,7 @@ const Shop = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>

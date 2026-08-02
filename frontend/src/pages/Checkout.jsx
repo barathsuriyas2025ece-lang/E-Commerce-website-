@@ -54,7 +54,6 @@ const Checkout = () => {
       }
     } catch (err) {
       console.error('Error placing order:', err);
-      // Fallback redirection
       clearCart();
       navigate('/orders');
     } finally {
@@ -63,81 +62,81 @@ const Checkout = () => {
   };
 
   return (
-    <div className="space-y-8 pb-12">
-      <h1 className="text-3xl font-extrabold text-white">Checkout & Payment</h1>
+    <div className="space-y-8 pb-16">
+      <h1 className="text-3xl font-extrabold text-slate-900">Checkout & Payment</h1>
 
       <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Shipping & Payment Details */}
         <div className="lg:col-span-2 space-y-6">
           {/* Shipping Address */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-indigo-400" />
+          <div className="glass-panel p-6 rounded-2xl space-y-4 bg-white border border-slate-200 shadow-sm">
+            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-indigo-600" />
               <span>Shipping Address</span>
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <label className="text-slate-300 font-medium">Full Name</label>
+                <label className="text-slate-700 font-bold">Full Name</label>
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
                   required
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"
                 />
               </div>
               <div>
-                <label className="text-slate-300 font-medium">Phone Number</label>
+                <label className="text-slate-700 font-bold">Phone Number</label>
                 <input
                   type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="text-slate-300 font-medium">Street Address</label>
+                <label className="text-slate-700 font-bold">Street Address</label>
                 <input
                   type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
                   required
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"
                 />
               </div>
               <div>
-                <label className="text-slate-300 font-medium">City</label>
+                <label className="text-slate-700 font-bold">City</label>
                 <input
                   type="text"
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
                   required
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"
                 />
               </div>
               <div>
-                <label className="text-slate-300 font-medium">State & Postal Code</label>
+                <label className="text-slate-700 font-bold">State & Postal Code</label>
                 <input
                   type="text"
                   name="postalCode"
                   value={formData.postalCode}
                   onChange={handleChange}
                   required
-                  className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 mt-1 text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"
                 />
               </div>
             </div>
           </div>
 
           {/* Payment Method Selector */}
-          <div className="glass-panel p-6 rounded-2xl space-y-4">
-            <h2 className="text-lg font-bold text-white">Select Payment Method</h2>
+          <div className="glass-panel p-6 rounded-2xl space-y-4 bg-white border border-slate-200 shadow-sm">
+            <h2 className="text-lg font-bold text-slate-900">Select Payment Method</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { id: 'Credit Card', name: 'Card / NetBanking', icon: CreditCard },
@@ -150,13 +149,13 @@ const Checkout = () => {
                     key={pm.id}
                     type="button"
                     onClick={() => setPaymentMethod(pm.id)}
-                    className={`p-4 rounded-xl border flex flex-col items-center gap-2 text-xs font-semibold transition ${
+                    className={`p-4 rounded-xl border flex flex-col items-center gap-2 text-xs font-bold transition ${
                       paymentMethod === pm.id
-                        ? 'bg-indigo-600/30 border-indigo-500 text-indigo-200 shadow-lg shadow-indigo-500/20'
-                        : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:bg-slate-800'
+                        ? 'bg-indigo-50 border-indigo-600 text-indigo-700 shadow-sm'
+                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                    <Icon className="w-6 h-6 text-indigo-400" />
+                    <Icon className="w-6 h-6 text-indigo-600" />
                     <span>{pm.name}</span>
                   </button>
                 );
@@ -166,16 +165,16 @@ const Checkout = () => {
         </div>
 
         {/* Right Column: Order Confirmation Summary */}
-        <div className="glass-panel p-6 rounded-2xl h-fit space-y-6">
-          <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-3">Final Order Total</h2>
+        <div className="glass-panel p-6 rounded-2xl h-fit space-y-6 bg-white border border-slate-200 shadow-sm">
+          <h2 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Final Order Total</h2>
 
-          <div className="space-y-2 text-xs border-b border-slate-800 pb-4">
-            <div className="flex justify-between text-slate-400"><span>Items Subtotal:</span><span>₹{subtotal.toLocaleString()}</span></div>
-            {discountAmount > 0 && <div className="flex justify-between text-emerald-400"><span>Discount:</span><span>-₹{discountAmount.toLocaleString()}</span></div>}
-            <div className="flex justify-between text-slate-400"><span>Estimated Tax:</span><span>₹{tax.toLocaleString()}</span></div>
-            <div className="flex justify-between text-white text-base font-extrabold pt-2">
+          <div className="space-y-2 text-xs border-b border-slate-100 pb-4">
+            <div className="flex justify-between text-slate-600 font-medium"><span>Items Subtotal:</span><span>₹{subtotal.toLocaleString()}</span></div>
+            {discountAmount > 0 && <div className="flex justify-between text-emerald-600 font-bold"><span>Discount:</span><span>-₹{discountAmount.toLocaleString()}</span></div>}
+            <div className="flex justify-between text-slate-600 font-medium"><span>Estimated Tax:</span><span>₹{tax.toLocaleString()}</span></div>
+            <div className="flex justify-between text-slate-900 text-base font-extrabold pt-2">
               <span>Payable Total:</span>
-              <span className="text-indigo-400">₹{total.toLocaleString()}</span>
+              <span className="text-indigo-600">₹{total.toLocaleString()}</span>
             </div>
           </div>
 

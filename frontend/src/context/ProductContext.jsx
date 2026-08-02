@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { productAPI } from '../services/api';
-import { sampleProducts } = require ? {} : { sampleProducts: [] };
 
 const ProductContext = createContext();
 
@@ -66,7 +65,6 @@ export const ProductProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Background async fetch to sync with remote API without blocking UI
     const syncProducts = async () => {
       try {
         const res = await productAPI.getProducts({});
@@ -74,13 +72,12 @@ export const ProductProvider = ({ children }) => {
           setProducts(res.data.products);
         }
       } catch (err) {
-        // Fallback already pre-loaded for O(1) instant speed
+        // Cached state ready
       }
     };
     syncProducts();
   }, []);
 
-  // O(1) Map cache lookup by ID
   const productMap = useMemo(() => {
     const map = new Map();
     products.forEach((p) => map.set(p._id.toString(), p));

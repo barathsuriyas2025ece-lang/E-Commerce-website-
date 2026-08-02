@@ -21,37 +21,37 @@ const NotificationBell = () => {
     <div className="relative">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="p-2 rounded-full text-slate-300 hover:text-white hover:bg-slate-800 relative transition"
+        className="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 relative transition"
         title="Notifications"
       >
         <Bell className="w-5 h-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-indigo-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
             {unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 glass-panel border border-slate-800 shadow-2xl z-50 p-4 text-slate-200">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
-            <h3 className="text-sm font-bold text-white">Notifications</h3>
+        <div className="absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 p-4 text-slate-800">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
+            <h3 className="text-xs font-bold text-slate-900">Notifications</h3>
             {unreadCount > 0 && (
-              <button onClick={markAllRead} className="text-[11px] text-indigo-400 hover:underline">
+              <button onClick={markAllRead} className="text-[11px] text-indigo-600 hover:underline font-bold">
                 Mark all read
               </button>
             )}
           </div>
 
-          <div className="space-y-3 max-h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto">
             {notifications.map((n) => {
               const IconComp = n.icon;
               return (
-                <div key={n.id} className={`flex items-start gap-3 p-2.5 rounded-lg text-xs transition ${n.read ? 'bg-slate-900/40 opacity-70' : 'bg-slate-800/80 border-l-2 border-indigo-500'}`}>
-                  <IconComp className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                <div key={n.id} className={`flex items-start gap-3 p-2.5 rounded-lg text-xs transition ${n.read ? 'bg-slate-50 opacity-75' : 'bg-indigo-50/50 border-l-2 border-indigo-600 font-semibold'}`}>
+                  <IconComp className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
                   <div className="flex-1">
-                    <p className="font-semibold text-slate-100">{n.title}</p>
-                    <span className="text-[10px] text-slate-400">{n.time}</span>
+                    <p className="font-bold text-slate-900">{n.title}</p>
+                    <span className="text-[10px] text-slate-500">{n.time}</span>
                   </div>
                 </div>
               );
