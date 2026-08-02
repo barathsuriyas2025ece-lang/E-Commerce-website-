@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://e-commerce-website-oxb0.onrender.com/api';
 
-// Create Axios instance with 1.5s strict timeout to prevent Render cold-start lag
+// Create Axios instance with 10s timeout to allow Render web service response
 const api = axios.create({
   baseURL: API_BASE,
-  timeout: 1500, // 1.5 seconds max timeout
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
