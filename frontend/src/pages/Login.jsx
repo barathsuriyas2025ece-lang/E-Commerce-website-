@@ -3,6 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Sparkles, Shield, UserCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
+const ADMIN_EMAIL = 'barathsuriya.s2025ece@sece.ac.in';
+const ADMIN_PASS = 'barath12345';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,7 +29,11 @@ const Login = () => {
     setPassword(demoPass);
     const res = await login(demoEmail, demoPass);
     if (res.success) {
-      navigate('/');
+      if (demoEmail === ADMIN_EMAIL) {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
     }
   };
 
@@ -51,7 +58,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="e.g. customer@example.com"
+              placeholder="e.g. barathsuriya.s2025ece@sece.ac.in"
               className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"
             />
           </div>
@@ -76,22 +83,22 @@ const Login = () => {
 
         {/* Instant Demo Accounts Buttons */}
         <div className="pt-4 border-t border-slate-100 space-y-2 text-xs">
-          <p className="text-slate-500 font-bold text-center">Quick Demo Login Shortcuts:</p>
+          <p className="text-slate-500 font-bold text-center">Quick Login Shortcuts:</p>
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => handleDemoLogin('customer@example.com', 'password123')}
               className="btn-secondary py-2 justify-center text-xs text-indigo-700 bg-indigo-50 border-indigo-200 hover:bg-indigo-100"
             >
               <UserCheck className="w-3.5 h-3.5" />
-              <span>Customer Demo</span>
+              <span>Customer Login</span>
             </button>
 
             <button
-              onClick={() => handleDemoLogin('admin@example.com', 'admin123')}
+              onClick={() => handleDemoLogin(ADMIN_EMAIL, ADMIN_PASS)}
               className="btn-secondary py-2 justify-center text-xs text-amber-800 bg-amber-50 border-amber-200 hover:bg-amber-100"
             >
               <Shield className="w-3.5 h-3.5" />
-              <span>Admin Demo</span>
+              <span>Admin Login</span>
             </button>
           </div>
         </div>

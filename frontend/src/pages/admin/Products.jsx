@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Package } from 'lucide-react';
 import { productAPI } from '../../services/api';
 
 const AdminProducts = () => {
@@ -83,25 +83,27 @@ const AdminProducts = () => {
         </button>
       </div>
 
-      {/* Products Table */}
+      {/* Clean Text-Driven Products Table (No Images) */}
       <div className="glass-panel rounded-2xl overflow-x-auto text-xs text-slate-800 bg-white border border-slate-200 shadow-sm">
         <table className="w-full text-left">
           <thead className="bg-slate-50 uppercase text-[10px] text-slate-600 font-extrabold border-b border-slate-200">
             <tr>
-              <th className="p-4">Product</th>
+              <th className="p-4">Product Name</th>
+              <th className="p-4">Brand</th>
               <th className="p-4">Category</th>
               <th className="p-4">Price</th>
-              <th className="p-4">Stock</th>
+              <th className="p-4">Inventory Stock</th>
               <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {products.map((p) => (
               <tr key={p._id} className="hover:bg-slate-50 transition">
-                <td className="p-4 flex items-center gap-3">
-                  <img src={p.images?.[0]} alt={p.name} className="w-10 h-10 rounded-lg object-cover bg-slate-100 border border-slate-200" />
-                  <span className="font-bold text-slate-900 line-clamp-1">{p.name}</span>
+                <td className="p-4 font-bold text-slate-900 line-clamp-1 flex items-center gap-2">
+                  <Package className="w-4 h-4 text-indigo-600 shrink-0" />
+                  <span>{p.name}</span>
                 </td>
+                <td className="p-4 font-semibold text-slate-700">{p.brand || 'Generic'}</td>
                 <td className="p-4 text-indigo-700 font-bold">{p.category}</td>
                 <td className="p-4 font-extrabold text-slate-900">₹{p.price?.toLocaleString()}</td>
                 <td className="p-4">
@@ -150,7 +152,7 @@ const AdminProducts = () => {
                 </select>
               </div>
               <div>
-                <label className="text-slate-700 font-bold">Image URL</label>
+                <label className="text-slate-700 font-bold">Image URL (Optional)</label>
                 <input type="text" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} required className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium" />
               </div>
               <div>

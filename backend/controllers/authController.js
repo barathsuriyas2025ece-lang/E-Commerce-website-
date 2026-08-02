@@ -2,20 +2,24 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
+const ADMIN_EMAIL = 'barathsuriya.s2025ece@sece.ac.in';
+
 const inMemoryUsers = [
   {
     _id: 'user_admin_001',
-    name: 'Admin User',
-    email: 'admin@example.com',
+    name: 'Barath Suriya (Admin)',
+    email: ADMIN_EMAIL,
     password: '$2a$10$X87q8P5JgqOQ5pYq.c.kZ.YQ5.Y5.Y5.Y5.Y5',
+    plainPassword: 'barath12345',
     role: 'admin',
-    loyaltyPoints: 500,
+    loyaltyPoints: 1000,
   },
   {
     _id: 'user_cust_001',
     name: 'Customer User',
     email: 'customer@example.com',
     password: '$2a$10$X87q8P5JgqOQ5pYq.c.kZ.YQ5.Y5.Y5.Y5.Y5',
+    plainPassword: 'password123',
     role: 'customer',
     loyaltyPoints: 120,
   },
@@ -36,8 +40,10 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please provide all required fields' });
     }
 
+    const cleanEmail = email.toLowerCase().trim();
+
     try {
-      const existingUser = await User.findOne({ email });
+      const existingUser = await User.findOne({ email: cleanEmail });
       if (existingUser) {
         return res.status(400).json({ success: false, message: 'User already exists with this email' });
       }
@@ -47,9 +53,9 @@ const registerUser = async (req, res) => {
 
       const user = await User.create({
         name,
-        email,
+        email: cleanEmail,
         password: hashedPassword,
-        role: role || 'customer',
+        role: role || (cleanEmail === ADMIN_EMAIL ? 'admin' : 'customer'),
       });
 
       const token = generateToken(user);
@@ -65,10 +71,10 @@ const registerUser = async (req, res) => {
       const newUser = {
         _id: 'user_' + Date.now(),
         name,
-        email,
+        email: cleanEmail,
         password: hashedPassword,
         plainPassword: password,
-        role: role || 'customer',
+        role: role || (cleanEmail === ADMIN_EMAIL ? 'admin' : 'customer'),
         loyaltyPoints: 100,
       };
       inMemoryUsers.push(newUser);
@@ -93,6 +99,17 @@ const loginUser = async (req, res) => {
 
     const cleanEmail = email.toLowerCase().trim();
 
+    // Direct check for Admin user credentials
+    if (cleanEmail === ADMIN_EMAIL && password === 'barath12345') {
+      const adminUser = inMemoryUsers[0];
+      const token = generateToken(adminUser);
+      return res.json({
+        success: true,
+        token,
+        user: { id: adminUser._id, name: adminUser.name, email: adminUser.email, role: 'admin', loyaltyPoints: 1000 },
+      });
+    }
+
     // 1. Try DB lookup
     try {
       const user = await User.findOne({ email: cleanEmail });
@@ -109,24 +126,17 @@ const loginUser = async (req, res) => {
     // 2. Try matching in-memory registered users
     const memUser = inMemoryUsers.find((u) => u.email.toLowerCase() === cleanEmail);
     if (memUser) {
-      let isMatch = false;
-      if (memUser.plainPassword && memUser.plainPassword === password) isMatch = true;
-      else if (await bcrypt.compare(password, memUser.password).catch(() => false)) isMatch = true;
-      else isMatch = true; // Seamless login fallback for registered demo accounts
-
-      if (isMatch) {
-        const token = generateToken(memUser);
-        return res.json({
-          success: true,
-          token,
-          user: { id: memUser._id, name: memUser.name, email: memUser.email, role: memUser.role, loyaltyPoints: memUser.loyaltyPoints },
-        });
-      }
+      const token = generateToken(memUser);
+      return res.json({
+        success: true,
+        token,
+        user: { id: memUser._id, name: memUser.name, email: memUser.email, role: memUser.role, loyaltyPoints: memUser.loyaltyPoints },
+      });
     }
 
-    // 3. Dynamic account creation/login fallback for user convenience
-    const role = cleanEmail.includes('admin') ? 'admin' : 'customer';
-    const name = cleanEmail.split('@')[0].replace('.', ' ').replace(/^./, (str) => str.toUpperCase());
+    // 3. Dynamic account creation/login fallback
+    const role = cleanEmail === ADMIN_EMAIL || cleanEmail.includes('admin') ? 'admin' : 'customer';
+    const name = cleanEmail === ADMIN_EMAIL ? 'Barath Suriya (Admin)' : cleanEmail.split('@')[0];
     const newUser = {
       _id: 'user_' + Date.now(),
       name,
