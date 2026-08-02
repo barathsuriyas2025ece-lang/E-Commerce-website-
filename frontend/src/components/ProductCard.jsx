@@ -96,9 +96,9 @@ const ProductCard = ({ product }) => {
 
           <button
             onClick={() => addToCart(product)}
-            className="btn-primary py-1.5 px-3 text-xs"
+            className="btn-primary bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-1.5 px-3 text-xs rounded-xl inline-flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
           >
-            <ShoppingCart className="w-3.5 h-3.5" />
+            <ShoppingCart className="w-3.5 h-3.5 text-white" />
             <span>Add</span>
           </button>
         </div>

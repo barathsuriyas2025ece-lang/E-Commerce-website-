@@ -77,8 +77,8 @@ const AdminProducts = () => {
           <p className="text-xs text-slate-500">Add, edit, or remove store products from catalog</p>
         </div>
 
-        <button onClick={() => setIsAddModalOpen(true)} className="btn-primary text-xs py-2.5 px-4">
-          <Plus className="w-4 h-4" />
+        <button onClick={() => setIsAddModalOpen(true)} className="btn-primary bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-xs py-2.5 px-4 rounded-xl inline-flex items-center gap-1.5 shadow-sm transition-all cursor-pointer">
+          <Plus className="w-4 h-4 text-white" />
           <span>Add New Product</span>
         </button>
       </div>
@@ -160,8 +160,8 @@ const AdminProducts = () => {
                 <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} required rows={3} className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 mt-1 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"></textarea>
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setIsAddModalOpen(false)} className="btn-secondary flex-1 justify-center">Cancel</button>
-                <button type="submit" className="btn-primary flex-1 justify-center">Save Product</button>
+                <button type="button" onClick={() => setIsAddModalOpen(false)} className="btn-secondary bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold py-2 px-4 rounded-xl flex-1 justify-center inline-flex items-center gap-1.5 shadow-xs transition-all cursor-pointer">Cancel</button>
+                <button type="submit" className="btn-primary bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2 px-4 rounded-xl flex-1 justify-center inline-flex items-center gap-1.5 shadow-sm transition-all cursor-pointer">Save Product</button>
               </div>
             </form>
           </div>

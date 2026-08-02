@@ -85,8 +85,8 @@ const Register = () => {
             </select>
           </div>
 
-          <button type="submit" disabled={loading} className="btn-primary w-full justify-center text-sm py-2.5">
-            <UserPlus className="w-4 h-4" />
+          <button type="submit" disabled={loading} className="btn-primary bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold w-full justify-center text-sm py-2.5 rounded-xl inline-flex items-center gap-2 shadow-sm transition-all cursor-pointer">
+            <UserPlus className="w-4 h-4 text-white" />
             <span>{loading ? 'Creating Account...' : 'Register Now'}</span>
           </button>
         </form>
