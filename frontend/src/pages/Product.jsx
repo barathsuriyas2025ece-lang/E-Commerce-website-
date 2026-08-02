@@ -65,7 +65,7 @@ const Product = () => {
     return (
       <div className="glass-panel p-12 text-center text-slate-700 space-y-4 max-w-md mx-auto my-12 bg-white border border-slate-200 shadow-sm">
         <h2 className="text-xl font-bold text-slate-900">Product Not Found</h2>
-        <button onClick={() => navigate('/shop')} className="btn-primary">Back to Shop</button>
+        <button onClick={() => navigate('/shop')} className="btn-primary bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2.5 px-6 rounded-xl inline-flex items-center gap-2 shadow-sm cursor-pointer">Back to Shop</button>
       </div>
     );
   }
@@ -174,9 +174,9 @@ const Product = () => {
             <div className="flex flex-wrap gap-4">
               <button
                 onClick={() => addToCart(product, quantity)}
-                className="btn-primary py-3 px-8 text-sm flex-1 justify-center"
+                className="btn-primary bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 px-8 text-sm flex-1 justify-center rounded-xl inline-flex items-center gap-2 shadow-sm transition-all cursor-pointer"
               >
-                <ShoppingCart className="w-4 h-4" />
+                <ShoppingCart className="w-4 h-4 text-white shrink-0" />
                 <span>Add to Cart</span>
               </button>
 
@@ -322,9 +322,9 @@ const Product = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="btn-primary py-2.5 px-6 text-xs"
+                    className="btn-primary bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2.5 px-6 text-xs rounded-xl inline-flex items-center gap-2 shadow-sm transition-all cursor-pointer"
                   >
-                    <Send className="w-3.5 h-3.5" />
+                    <Send className="w-3.5 h-3.5 text-white shrink-0" />
                     <span>{submitting ? 'Posting...' : existingReview ? 'Update Review' : 'Submit Review'}</span>
                   </button>
 
@@ -332,9 +332,9 @@ const Product = () => {
                     <button
                       type="button"
                       onClick={() => handleDeleteReview(existingReview._id)}
-                      className="btn-secondary py-2.5 px-4 text-xs text-red-600 hover:bg-red-50 border-red-200"
+                      className="btn-secondary bg-white hover:bg-red-50 text-red-600 border border-red-200 font-bold py-2.5 px-4 text-xs rounded-xl inline-flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
                     >
-                      <Trash2 className="w-3.5 h-3.5 text-red-600" />
+                      <Trash2 className="w-3.5 h-3.5 text-red-600 shrink-0" />
                       <span>Delete My Review</span>
                     </button>
                   )}
