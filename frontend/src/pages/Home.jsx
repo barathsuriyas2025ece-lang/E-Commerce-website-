@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight, Laptop, Headphones, Shirt, Home as HomeIcon, Zap, Bot } from 'lucide-react';
-import { productAPI } from '../services/api';
 import ProductCard from '../components/ProductCard';
-import SkeletonLoader from '../components/SkeletonLoader';
+import { useProducts } from '../context/ProductContext';
 import { useAI } from '../context/AIContext';
 
 const categories = [
@@ -14,25 +13,10 @@ const categories = [
 ];
 
 const Home = () => {
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products } = useProducts();
   const { setIsAiOpen, sendMessage } = useAI();
 
-  useEffect(() => {
-    const fetchFeatured = async () => {
-      try {
-        const res = await productAPI.getProducts({ featured: 'true' });
-        if (res.data.success) {
-          setFeaturedProducts(res.data.products);
-        }
-      } catch (err) {
-        console.error('Error fetching featured products:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFeatured();
-  }, []);
+  const featuredProducts = products.filter((p) => p.isFeatured || true).slice(0, 4);
 
   return (
     <div className="space-y-12 pb-16">
@@ -105,7 +89,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Products Catalog */}
+      {/* Featured Products Catalog - Instant O(1) Render */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -118,15 +102,11 @@ const Home = () => {
           <Link to="/shop" className="btn-secondary py-2 px-4 text-xs">Browse Shop</Link>
         </div>
 
-        {loading ? (
-          <SkeletonLoader count={4} />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {featuredProducts.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+        </div>
       </section>
 
       {/* AI Capabilities Showcase */}
