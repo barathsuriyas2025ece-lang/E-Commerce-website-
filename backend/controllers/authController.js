@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-const { sendLoginNotificationEmail } = require('../notifications/emailService');
+const { sendLoginNotificationEmail, sendWelcomeEmail } = require('../notifications/emailService');
 
 const ADMIN_EMAIL = 'barathsuriya.s2025ece@sece.ac.in';
 
@@ -33,8 +33,8 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Password must be at least 6 characters long' });
     }
 
-    // Trigger Login Confirmation Email Notification
-    sendLoginNotificationEmail({ name: cleanName, email: cleanEmail });
+    // Trigger Welcome Email Notification
+    sendWelcomeEmail({ name: cleanName, email: cleanEmail });
 
     try {
       const existingUser = await User.findOne({ email: cleanEmail });
