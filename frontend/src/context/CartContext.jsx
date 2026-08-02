@@ -4,8 +4,13 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    const saved = localStorage.getItem('cartItems');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('cartItems');
+      return saved && saved !== 'undefined' ? JSON.parse(saved) : [];
+    } catch (e) {
+      localStorage.removeItem('cartItems');
+      return [];
+    }
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
